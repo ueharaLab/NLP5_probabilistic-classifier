@@ -8,25 +8,28 @@ tsukurepo_bow= pd.read_csv('syu_prin.csv', encoding='ms932', sep=',',skiprows=0)
 
 # ------------- 事前確率の計算 ------------------------
 num_train = len(tsukurepo_bow)
-priors={'シュークリーム':0,'プリン':0}
+priors={'シュークリーム':0,'プリン':0}#事前確率を初期化
+
 for l,val in priors.items():
 
-    num = len(tsukurepo_bow[tsukurepo_bow['label']==l])
+    num = len(tsukurepo_bow[tsukurepo_bow['label']==l])# これは何をやっているだろうか？
     priors[l]= ###   ###
 
 # ----------- 尤度 -----------------------------------
-tsukurepo_byLabel = tsukurepo_bow.groupby('label').sum()
+tsukurepo_byLabel = tsukurepo_bow.groupby('label').sum()# label（シュー/プリン）毎の語彙小計を計算
 total_val = np.sum(tsukurepo_bow.values[:,1:])
 words_logProbs=[]
 labels = []
-for label, words in tsukurepo_byLabel.iterrows():
+for label, words in tsukurepo_byLabel.iterrows():# label,wordsにはそれぞれ何が入っているか？
 
     count_total = np.sum(words.values)
     # 加算スムージングを行った対数尤度
     words_prob = np.log((###   ###)/(###   ###))
     words_logProbs.append(words_prob)
     labels.append(label)
-
+    
+# index:ラベル(シュー/プリン)　columns：語彙であるようなdataframeを作成。値には上記の加算スムージング済の尤度が入る。このコーディングで
+# なぜそのようなdataframeを作れるのか？（csvに書き出しているのでdataframeのイメージは確認できる）
 words_logProbs_df = pd.DataFrame(words_logProbs,index=labels, columns = tsukurepo_byLabel.columns.tolist() )
 with codecs.open("./data/syu_prin_logLikelihood.csv", "w", "ms932", "ignore") as f: 
     

@@ -1,14 +1,13 @@
 # ツクレポのBoWをナイーブベイズで識別する
+
 前回のk-nearest neighborに代わってナイーブベイズで学習識別すると、杏仁豆腐、プリン、シューの識別性能はどのように変化するかを確認する。  
+
 1. 以下のコーディングは演習のプログラムと同様だが、以下の点が異なる。それぞれ、コーディング中でどの部分が該当するかを考えよ。  
    (1)   bowを予め訓練データとテストデータに分割し、学習には訓練データを用いる  
    (2)   識別ではテストデータを用いる。更に識別結果とテストデータの真のラベルとを比較して一致した率（識別精度）を計算する。
-2. [naive_bayes_tsukurepo.py](naive_bayes_tsukurepo.py)を実行して識別精度を確認せよ。また、BoWをTF-IDFベースのデータにして再度識別精度を確認せよ（識別精度が下がる！）
+2. [naive_bayes_tsukurepo.py](naive_bayes_tsukurepo.py)を実行して識別精度を確認せよ。tsukurepo_bow.csvは頻度ベース、tsukurepo_bow_TFIDF.csvはTF IDF。後者の方が精度が高くなる
 
-
-
-
-``` python
+```python
 tsukurepo_bow= pd.read_csv('./data/tsukurepo_bow.csv', encoding='ms932', sep=',',skiprows=0)
 
 tsukurepo_bow=pd.concat([tsukurepo_bow.iloc[:,0],tsukurepo_bow.iloc[:,4:]],axis=1)
@@ -52,7 +51,7 @@ def posterior_inference(words):
         #print(log_likelihood,priors[label])
         posterior = log_likelihood + priors[l]
         posteriors[l]=posterior
-       
+
     max_label = max(posteriors, key=posteriors.get)
     return max_label
 
@@ -70,7 +69,4 @@ for i,row in test_bow.iterrows():
 accuracy = true_counter/len(test_bow)
 
 print('predict accuracy :{0} no.of test data :{1}'.format(accuracy,len(test_bow)))
-
-
-
-
+```
